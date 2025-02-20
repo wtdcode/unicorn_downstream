@@ -1,0 +1,73 @@
+name: Check Qiling
+
+on:
+  workflow_dispatch:
+    inputs:
+      UnicornRepo:
+        description: 'Unicorn Repo to checkout'
+        required: true
+        default: https://github.com/unicorn-engine/unicorn
+        type: string
+      QilingRepo:
+        description: 'Unicorn Repo to checkout'
+        required: true
+        default: https://github.com/qilingframework/qiling
+        type: string
+      Unicorn:
+        description: 'Unicorn Revision To Build'
+        required: true
+        default: dev
+        type: string
+      Qiling:
+        description: 'Qiling Revision To Build'
+        required: true
+        default: dev
+        type: string
+  schedule:
+    - cron: '5 4 * * *'
+
+env:
+  # Specify build type either according to the tag release or manual override
+  UNICORN_REPO: ${{ inputs.UnicornRepo != '' && inputs.UnicornRepo || 'dev'}}
+  QILING_REPO: ${{ inputs.QilingRepo != '' && inputs.QilingRepo || 'dev'}}
+  UNICORN_REVISION: ${{ inputs.Unicorn != '' && inputs.Unicorn || 'dev'}}
+  QILING_REVISION: ${{ inputs.Qiling != '' && inputs.Qiling || 'dev'}}
+
+jobs:
+  Windows:
+    runs-on: ubuntu-latest
+    name: Qiling-Unicorn-Testing
+    strategy:
+      fail-fast: false
+    steps:
+      - name: 'Checkout Both Repo'
+        run: |
+          echo $UNICORN_REPO $UNICORN_REVISION $QILING_REPO &QILING_REVISION &&\
+          git clone $UNICORN_REPO unicorn && cd unicorn && git checkout $UNICORN_REVISION && cd .. &&\
+          git clone &QILING_REPO qiling && cd qiling && git checkout &QILING_REVISION
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.10' 
+
+      - name: 'Dependency'
+        run: sudo apt install -q -y cmake ninja-build && pip install -U wheel setuptools pip
+      
+      - name: 'Build Unicorn'
+        run: cd unicorn/bindings/python && pip install .
+
+      - name: 'Build Qiling'
+        run: cd qiling && pip install .
+      
+      - name: 'Test'
+        run: |
+          cd qiling
+          cd examples
+          rm -rf rootfs
+          wget https://github.com/qilingframework/rootfs/archive/refs/heads/master.zip
+          unzip master.zip && mv rootfs-master rootfs
+          cd ../qiling
+          cd ../examples/rootfs/x86_linux/kernel && unzip -P infected m0hamed_rootkit.ko.zip
+          cd ../../../../
+          pip3 install -e .[evm,RE]
+          cd tests && ./test_onlinux.sh
