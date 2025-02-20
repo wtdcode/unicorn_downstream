@@ -55,7 +55,7 @@ jobs:
         
       # Install Qiling in advance by design
       - name: 'Build Qiling'
-        run: cd qiling && pip install .
+        run: cd qiling && pip install .[evm,RE]
 
       - name: 'Build Unicorn'
         run: cd unicorn/bindings/python && THREADS=4 pip install .      
@@ -69,9 +69,7 @@ jobs:
           unzip master.zip && mv rootfs-master rootfs
           cd ../qiling
           cd ../examples/rootfs/x86_linux/kernel && unzip -P infected m0hamed_rootkit.ko.zip
-          cd ../../../../
-          pip3 install -e .[evm,RE]
-          cd tests && ./test_onlinux.sh
+          cd ../../../../tests && ./test_onlinux.sh
       
       - name: 'Notification'
         run: echo "::notice title=$QILING_REPO,$QILING_REVISION,works with,$UNICORN_REPO,$UNICORN_REVISION"
