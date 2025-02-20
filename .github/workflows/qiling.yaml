@@ -9,7 +9,7 @@ on:
         default: https://github.com/unicorn-engine/unicorn
         type: string
       QilingRepo:
-        description: 'Unicorn Repo to checkout'
+        description: 'Qiling Repo to checkout'
         required: true
         default: https://github.com/qilingframework/qiling
         type: string
