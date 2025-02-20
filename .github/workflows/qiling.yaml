@@ -23,6 +23,11 @@ on:
         required: true
         default: dev
         type: string
+      Python:
+        description: 'Python Version To Use'
+        required: true
+        default: '3.10'
+        type: string
   schedule:
     - cron: '5 4 * * *'
 
@@ -51,7 +56,7 @@ jobs:
 
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.10' 
+          python-version: ${{ inputs.Python != '' && inputs.Python || '3.10'}} 
 
       - name: 'Dependency'
         run: sudo apt install -q -y cmake ninja-build pkg-config && pip install -U wheel setuptools pip
