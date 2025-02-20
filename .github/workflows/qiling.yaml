@@ -71,3 +71,6 @@ jobs:
           cd ../../../../
           pip3 install -e .[evm,RE]
           cd tests && ./test_onlinux.sh
+      
+      - name: 'Notification'
+        run: echo "::notice title=$QILING_REPO,$QILING_REVISION,works with,$UNICORN_REPO,$UNICORN_REVISION"
