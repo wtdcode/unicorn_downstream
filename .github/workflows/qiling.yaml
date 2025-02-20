@@ -52,12 +52,13 @@ jobs:
 
       - name: 'Dependency'
         run: sudo apt install -q -y cmake ninja-build pkg-config && pip install -U wheel setuptools pip
-      
-      - name: 'Build Unicorn'
-        run: cd unicorn/bindings/python && THREADS=4 pip install .
-
+        
+      # Install Qiling in advance by design
       - name: 'Build Qiling'
         run: cd qiling && pip install .
+
+      - name: 'Build Unicorn'
+        run: cd unicorn/bindings/python && THREADS=4 pip install .      
       
       - name: 'Test'
         run: |
