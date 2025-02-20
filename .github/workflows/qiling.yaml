@@ -40,6 +40,9 @@ jobs:
     strategy:
       fail-fast: false
     steps:
+      - name: 'Log Revision'
+        run: echo "::notice title=$QILING_REPO,$QILING_REVISION,testing with,$UNICORN_REPO,$UNICORN_REVISION"
+
       - name: 'Checkout Both Repo'
         run: |
           echo $UNICORN_REPO $UNICORN_REVISION $QILING_REPO $QILING_REVISION &&\
