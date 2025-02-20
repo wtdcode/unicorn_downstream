@@ -42,9 +42,9 @@ jobs:
     steps:
       - name: 'Checkout Both Repo'
         run: |
-          echo $UNICORN_REPO $UNICORN_REVISION $QILING_REPO &QILING_REVISION &&\
+          echo $UNICORN_REPO $UNICORN_REVISION $QILING_REPO $QILING_REVISION &&\
           git clone $UNICORN_REPO unicorn && cd unicorn && git checkout $UNICORN_REVISION && cd .. &&\
-          git clone &QILING_REPO qiling && cd qiling && git checkout &QILING_REVISION
+          git clone $QILING_REPO qiling && cd qiling && git checkout $QILING_REVISION
 
       - uses: actions/setup-python@v5
         with:
