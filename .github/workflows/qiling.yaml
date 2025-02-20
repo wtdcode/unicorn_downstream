@@ -41,7 +41,7 @@ jobs:
       fail-fast: false
     steps:
       - name: 'Log Revision'
-        run: echo "::notice title=$QILING_REPO,$QILING_REVISION,testing with,$UNICORN_REPO,$UNICORN_REVISION"
+        run: echo "::notice title=$QILING_REPO $QILING_REVISION testing with $UNICORN_REPO $UNICORN_REVISION"
 
       - name: 'Checkout Both Repo'
         run: |
@@ -75,4 +75,4 @@ jobs:
           cd ../../../../tests && ./test_onlinux.sh
       
       - name: 'Notification'
-        run: echo "::notice title=$QILING_REPO,$QILING_REVISION,works with,$UNICORN_REPO,$UNICORN_REVISION"
+        run: echo "::notice title=$QILING_REPO $QILING_REVISION works with $UNICORN_REPO $UNICORN_REVISION"
