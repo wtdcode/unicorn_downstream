@@ -28,8 +28,6 @@ on:
         required: true
         default: '3.10'
         type: string
-  schedule:
-    - cron: '5 4 * * *'
 
 env:
   # Specify build type either according to the tag release or manual override
@@ -63,14 +61,14 @@ jobs:
         
       # Install Qiling in advance by design
       - name: 'Build Qiling'
-        run: cd qiling && pip install .[evm,RE]
+        run: mv qiling /tmp/ && cd /tmp/qiling && pip install .[evm,RE]
 
       - name: 'Build Unicorn'
         run: cd unicorn/bindings/python && THREADS=4 pip install .      
       
       - name: 'Test'
         run: |
-          cd qiling
+          cd /tmp/qiling
           cd examples
           rm -rf rootfs
           wget https://github.com/qilingframework/rootfs/archive/refs/heads/master.zip
